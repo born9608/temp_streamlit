@@ -1,7 +1,6 @@
 streamlit
 numpy
 pandas
-streamlit_option_menu
-matplotlib.pyplot
+matplotlib
 sklearn
 seaborn
