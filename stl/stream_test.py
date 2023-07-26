@@ -17,17 +17,25 @@ encoder = LabelEncoder()
 
 # 데이터프레임 선언
 df_abal = abal_data_eda(abal_datapath)
+df_star = pd.read_csv(star_datapath)
 df_binary, df_multi = steel_data_eda(steel_datapath)
 
 with st.sidebar:
     choose = option_menu("판교에서 만나요", ["전복(Abalone)", "중성자별(Star)", "강판(Steel)"],
                          icons=['bi bi-droplet', 'star', 'bi bi-ticket-fill'],
-                         menu_icon="bi bi-people", default_index=1)
+                         menu_icon="bi bi-people", default_index=1, 
+                         styles={
+                        "container": {"padding": "0!important", "background-color": "#fafafa"},
+                        "icon": {"color": "orange", "font-size": "18px"}, 
+                        "nav-link": {"font-size": "18px", "text-align": "left", "margin":"5px", "--hover-color": "#FFE192"},
+                        "nav-link-selected": {"background-coloaddr": "#FFC939"},
+                               }
+)
 
 if choose == "전복(Abalone)":
     selected_menu = option_menu(None, ["데이터 설명", 'EDA', "모델 예측"],
-    icons=['bi bi-file-earmark', 'kanban','bi bi-gear'],
-    menu_icon="cast", default_index=0, orientation="horizontal")
+                                icons=['bi bi-file-earmark', 'kanban','bi bi-gear'],
+                                menu_icon="cast", default_index=0, orientation="horizontal")
     
     columns_list =  df_abal.columns.to_list()
 
@@ -39,7 +47,7 @@ if choose == "전복(Abalone)":
         st.sidebar.header('특성 선택')
 
         with st.sidebar:
-            option = st.selectbox('특성을 골라주세요', columns_list)
+            option = st.selectbox('확인하고 싶은 특성을 선택하세요', columns_list)
 
         # 색깔 관련
         num_color = columns_list.index(option)
@@ -50,17 +58,19 @@ if choose == "전복(Abalone)":
 
             visual_way = ['Count Plot', 'Violin Plot']
             with st.sidebar:
-                option_2nd = st.selectbox('시각화 방법을 선택하세요', visual_way)
+                option_2nd = st.selectbox('확인하고 싶은 그래프를 선택하세요', visual_way)
 
             if option_2nd == 'Count Plot':
 
                 plt.figure()
                 sns.countplot(x='Sex', data=df_abal, palette=Sex_palette)
+                plt.title(f'{option} Count Plot')
                 st.pyplot(plt)
 
             else:
                 plt.figure()
                 sns.violinplot(x='Sex', y = "Rings", data=df_abal, palette=Sex_palette)
+                plt.title(f'{option} Violin Plot')                
                 st.pyplot(plt)
 
         else:
@@ -68,7 +78,7 @@ if choose == "전복(Abalone)":
             visual_way = ['Kernel Distribution', 'Box Plot']
             color = sns.color_palette('husl', 10)
             with st.sidebar:
-                option_2nd = st.selectbox('시각화 방법을 선택하세요', visual_way)
+                option_2nd = st.selectbox('확인하고 싶은 그래프를 선택하세요', visual_way)
 
             if option_2nd == 'Kernel Distribution':
                 
@@ -80,13 +90,62 @@ if choose == "전복(Abalone)":
             else:
                 plt.figure()
                 sns.boxplot(x=option, data=df_abal, color=color[num_color])
-                plt.title(f'{option} Box Plot')
+                plt.title(f'{option} Box plot')
                 st.pyplot(plt)
+
+    else:
+        pass
+
+
+if choose == "중성자별(Star)":
+    selected_menu = option_menu(None, ["데이터 설명", 'EDA', "모델 예측"],
+                                icons=['bi bi-file-earmark', 'kanban','bi bi-gear'],
+                                menu_icon="cast", default_index=0, orientation="horizontal")
+
+
+    if selected_menu == "데이터 설명":
+        pass
+    
+
+    if selected_menu == "EDA":
+        columns_list =  df_star.columns.to_list()
+        visual_way = ['Kernel Distribution', 'Box Plot']
+
+        with st.sidebar:
+            option = st.selectbox('확인하고 싶은 특성을 선택하세요', columns_list)
+
+        if option == 'target_class':
+            option_2nd = st.selectbox('확인하고 싶은 그래프를 선택하세요', 'Count Plot')
+
+            plt.figure()
+            sns.countplot(x='target_class', data=df_star)
+            plt.title(f'{option} Count Plot')
+            st.pyplot(plt)
+        
+        else:
+            with st.sidebar:
+                option_2nd = st.selectbox('확인하고 싶은 그래프를 선택하세요', visual_way)  
+
+            if option_2nd == 'Kernel Distribution':
+                plt.figure()
+                sns.kdeplot(df_star[option])
+                plt.title(f'{option} Kernel Distribution')
+                st.pyplot(plt)
+
+            else:
+                plt.figure()
+                box_plot = sns.boxplot(x='target_class', y=option, data=df_star)
+                box_plot.set_xticklabels(['Not Pulsar', 'Pulsar'])
+                plt.title(f'Box plot of {option}, grouped by target')
+                st.pyplot(plt)
+    else:
+        pass
+
 
 if choose == "강판(Steel)":
     selected_menu = option_menu(None, ["데이터 설명", 'EDA', "모델 예측"],
-    icons=['bi bi-file-earmark', 'kanban','bi bi-gear'],
-    menu_icon="cast", default_index=0, orientation="horizontal")
+                                icons=['bi bi-file-earmark', 'kanban','bi bi-gear'],
+                                menu_icon="cast", default_index=0, orientation="horizontal")
     
     # 이진, 다중분류 선택해서 쓰게 하기 위해
     binary_column_list = df_binary.columns.to_list()
