@@ -2,10 +2,8 @@ import streamlit as st
 from streamlit_option_menu import option_menu
 import pandas as pd
 import matplotlib.pyplot as plt
-import warnings
 
 import seaborn as sns
-from sklearn.model_selection import train_test_split
 from eda import abal_data_eda, steel_data_eda
 
 abal_datapath = '../data/abalone.csv'
@@ -50,7 +48,6 @@ if choose == "전복(Abalone)":
                 option_2nd = st.selectbox('시각화 방법을 선택하세요', visual_way)
 
             if option_2nd == 'Count Plot':
-                st.title('특성 별 분포 및 시각화')
 
                 plt.figure()
                 sns.countplot(x='Sex', data=df_abal, palette=Sex_palette)
