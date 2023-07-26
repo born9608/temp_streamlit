@@ -6,9 +6,9 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 from eda import abal_data_eda, steel_data_eda
 
-abal_datapath = '../data/abalone.csv'
-star_datapath = '../data/star.csv'
-steel_datapath = '../data/steel.csv'
+abal_datapath = 'data/abalone.csv'
+star_datapath = 'data/star.csv'
+steel_datapath = 'data/steel.csv'
 
 # 데이터프레임 선언
 df_abal = abal_data_eda(abal_datapath)
