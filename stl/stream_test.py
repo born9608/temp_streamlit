@@ -5,7 +5,6 @@ import matplotlib.pyplot as plt
 import warnings
 
 import seaborn as sns
-from sklearn.model_selection import train_test_split
 from eda import abal_data_eda, steel_data_eda
 
 abal_datapath = '../data/abalone.csv'
