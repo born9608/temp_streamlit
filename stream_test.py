@@ -45,9 +45,9 @@ df_star = pd.read_csv(star_datapath)
 df_binary, df_multi = steel_data_eda(steel_datapath)
 
 with st.sidebar:
-    choose = option_menu("판교에서 만나요", ["전복(Abalone)", "중성자별(Star)", "강판(Steel)"],
-                         icons=['bi bi-droplet', 'star', 'bi bi-ticket-fill'],
-                         menu_icon="bi bi-people", default_index=1, 
+    choose = option_menu("판교에서 만나요", ["Home", "전복(Abalone)", "중성자별(Star)", "강판(Steel)"],
+                         icons=['bi bi-house', 'bi bi-droplet', 'star', 'bi bi-ticket-fill'],
+                         menu_icon="bi bi-people", default_index=0, 
                          styles={
                         "container": {"padding": "0!important", "background-color": "#fafafa"},
                         "icon": {"color": "orange", "font-size": "18px"}, 
@@ -55,6 +55,9 @@ with st.sidebar:
                         "nav-link-selected": {"background-coloaddr": "#FFC939"},
                                }
 )
+
+if choose == "Home":
+    st.write("홈 화면이 구성될 페이지입니다")
 
 if choose == "전복(Abalone)":
     selected_menu = option_menu(None, ["데이터 설명", '데이터 시각화', "모델 예측"],
@@ -305,41 +308,43 @@ if choose == "강판(Steel)":
                                                     "icon": {"color": "orange", "font-size": "18px"}, 
                                                     "nav-link-selected": {"background-coloaddr": "#FFC939"},
                                                 })
-        st.image('steel.jpeg')
 
         if selected_sub_menu == "특성 설명":
-            st.write('X_Minimum: 결함이 있는 영역의 X 좌표 중 최소값 -> Area 만들고 제거')
-            st.write('X_Maximum: 결함이 있는 영역의 X 좌표 중 최대값 -> Area 만들고 제거')
-            st.write('Y_Minimum: 결함이 있는 영역의 Y 좌표 중 최소값 -> Area 만들고 제거')
-            st.write('Y_Maximum: 결함이 있는 영역의 Y 좌표 중 최대값 -> Area 만들고 제거')
-            st.write("Area : 위의 4가지를 조합해서 새로만든 컬럼")
-            st.write('너비 공식')
-            st.write("('X_Maximum' - 'X_Minimum') * ('Y_Maximum' - 'Y_Minimum')")
-            st.write('Pixels_Areas: 결함이 있는 영역의 픽셀 면적')
-            st.write('X_Perimeter: 결함이 있는 영역의 X 방향 둘레 길이')
-            st.write('Y_Perimeter: 결함이 있는 영역의 Y 방향 둘레 길이')
-            st.write('Sum_of_Luminosity: 결함 영역의 픽셀 밝기 합계')
-            st.write('Minimum_of_Luminosity: 결함 영역 내 최소 픽셀 밝기')
-            st.write('Maximum_of_Luminosity: 결함 영역 내 최대 픽셀 밝기')
-            st.write('Length_of_Conveyer: 컨베이어의 길이')
-            st.write('TypeOfSteel_A300: 강철 유형 A300 여부 (이진 변수)라 제거')
-            st.write('TypeOfSteel_A400: 강철 유형 A400 여부 (이진 변수)라 제거')
-            st.write('TypeOfSteel : 0은 A300, 1은 A400 (전처리를 통해 이진 변수이므로 바꿈)')
-            st.write('Steel_Plate_Thickness: 강철판 두께')
-            st.write('Edges_Index: 결함 영역 내 가장자리의 인덱스')
-            st.write('Empty_Index: 결함 영역 내 빈 공간의 인덱스')
-            st.write('Square_Index: 결함 영역이 정사각형인지를 나타내는 인덱스')
-            st.write('Outside_X_Index: 결함 영역이 X 방향 바깥쪽에 위치한 비율')
-            st.write('Edges_X_Index: 결함 영역 내 X 방향 가장자리의 인덱스')
-            st.write('Edges_Y_Index: 결함 영역 내 Y 방향 가장자리의 인덱스')
-            st.write('Outside_Global_Index: 결함 영역이 전체 영역에서 X와 Y 방향 바깥쪽에 위치한 비율 -> 특성중요도 기반 제거')
-            st.write('LogOfAreas: 결함 영역의 픽셀 면적에 대한 로그값')
-            st.write('Log_X_Index: 결함 영역의 X 좌표에 대한 로그값 -> 제거')
-            st.write('Log_Y_Index: 결함 영역의 Y 좌표에 대한 로그값 -> 제거')
-            st.write('Orientation_Index: 결함 영역의 방향 인덱스')
-            st.write('Luminosity_Index: 결함 영역의 밝기 인덱스')
-            st.write('SigmoidOfAreas: 결함 영역의 픽셀 면적에 대한 시그모이드 값')
-            st.write('Type: 강철판 결함의 종류 (다중 분류를 위한 목표 변수) -> 이것도 원핫인코딩 형태를 하나의 컬럼으로 정의하고 라벨인코딩 실시)')
+            st.image('steel.jpeg')
+
+            
+            st.markdown('- **X_Minimum** : 결함이 있는 영역의 X 좌표 중 최소값 -> Area 만들고 제거')
+            st.markdown('- **X_Maximum** : 결함이 있는 영역의 X 좌표 중 최대값 -> Area 만들고 제거')
+            st.markdown('- **Y_Minimum** : 결함이 있는 영역의 Y 좌표 중 최소값 -> Area 만들고 제거')
+            st.markdown('- **Y_Maximum** : 결함이 있는 영역의 Y 좌표 중 최대값 -> Area 만들고 제거')
+            st.markdown("- **Area** : 위의 4가지를 조합해서 새로만든 컬럼")
+            st.markdown('- **너비 공식**')
+            st.markdown("**('X_Maximum' - 'X_Minimum') * ('Y_Maximum' - 'Y_Minimum')**")
+            st.markdown('- **Pixels_Areas** : 결함이 있는 영역의 픽셀 면적')
+            st.markdown('- **X_Perimeter** : 결함이 있는 영역의 X 방향 둘레 길이')
+            st.markdown('- **Y_Perimeter** : 결함이 있는 영역의 Y 방향 둘레 길이')
+            st.markdown('- **Sum_of_Luminosity** : 결함 영역의 픽셀 밝기 합계')
+            st.markdown('- **Minimum_of_Luminosity** : 결함 영역 내 최소 픽셀 밝기')
+            st.markdown('- **Maximum_of_Luminosity** : 결함 영역 내 최대 픽셀 밝기')
+            st.markdown('- **Length_of_Conveyer** : 컨베이어의 길이')
+            st.markdown('- **TypeOfSteel_A300** : 강철 유형 A300 여부 (이진 변수)라 제거')
+            st.markdown('- **TypeOfSteel_A400** : 강철 유형 A400 여부 (이진 변수)라 제거')
+            st.markdown('- **TypeOfSteel** : 0은 A300, 1은 A400 (전처리를 통해 이진 변수이므로 바꿈)')
+            st.markdown('- **Steel_Plate_Thickness** : 강철판 두께')
+            st.markdown('- **Edges_Index** : 결함 영역 내 가장자리의 인덱스')
+            st.markdown('- **Empty_Index** : 결함 영역 내 빈 공간의 인덱스')
+            st.markdown('- **Square_Index** : 결함 영역이 정사각형인지를 나타내는 인덱스')
+            st.markdown('- **Outside_X_Index** : 결함 영역이 X 방향 바깥쪽에 위치한 비율')
+            st.markdown('- **Edges_X_Index** : 결함 영역 내 X 방향 가장자리의 인덱스')
+            st.markdown('- **Edges_Y_Index** : 결함 영역 내 Y 방향 가장자리의 인덱스')
+            st.markdown('- **Outside_Global_Index** : 결함 영역이 전체 영역에서 X와 Y 방향 바깥쪽에 위치한 비율 -> 특성중요도 기반 제거')
+            st.markdown('- **LogOfAreas** : 결함 영역의 픽셀 면적에 대한 로그값')
+            st.markdown('- **Log_X_Index** : 결함 영역의 X 좌표에 대한 로그값 -> 제거')
+            st.markdown('- **Log_Y_Index** : 결함 영역의 Y 좌표에 대한 로그값 -> 제거')
+            st.markdown('- **Orientation_Index** : 결함 영역의 방향 인덱스')
+            st.markdown('- **Luminosity_Index** : 결함 영역의 밝기 인덱스')
+            st.markdown('- **SigmoidOfAreas** : 결함 영역의 픽셀 면적에 대한 시그모이드 값')
+            st.markdown('- **Type** : 강철판 결함의 종류 (다중 분류를 위한 목표 변수) -> 이것도 원핫인코딩 형태를 하나의 컬럼으로 정의하고 라벨인코딩 실시)')
 
         elif selected_sub_menu == "이진분류 데이터 보기":
             with st.sidebar:
