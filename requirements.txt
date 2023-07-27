@@ -6,5 +6,4 @@ scikit-learn
 seaborn
 streamlit_option_menu
 joblib
-warnings
 imbalanced-learn
