@@ -104,7 +104,7 @@ if choose == "전복(Abalone)":
             with st.sidebar:   
                 values = st.slider(
                     'Rings(target)에 맞춰 데이터를 확인하세요',
-                    0.0, 30.0, (10.0, 20.0))
+                    0, 30, (5, 25), step=1)
             
             df_filtered = df_abal[(df_abal['Rings'] >= values[0]) & (df_abal['Rings'] <= values[1])]
             st.dataframe(df_filtered)
