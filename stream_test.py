@@ -5,23 +5,45 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 import warnings
 import joblib
+import keras
 
 from streamlit_option_menu import option_menu
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import LabelEncoder, StandardScaler
 from eda import abal_data_eda, steel_data_eda
+from Abal_DL_local_run_v1.EvalAccuracy import EvalAccuracy
+
+
+# 전복 딥러닝모델
+path_abal = 'Abal_DL_local_run_v1/model_layers'
+deep_abal_model = keras.models.load_model(path_abal, custom_objects={"EvalAccuracy": EvalAccuracy})
+
+# 전복 머신러닝 모델(Catboost, Gradientboost)
+path_cat = 'model/abalone_model/final/ML_model1_pickling/cat_model_v1.pkl'
+cat_model = joblib.load(path_cat)
+# path_gb = 'model/abalone_model/final/ML_model1_pickling/gbm_model_v1.pkl'
+# gb_model = joblib.load(path_gb)
+
+# 전복 스케일링(ML/DL)
+abal_ml_scaler = joblib.load('model/abalone_model/final/ML_model1_pickling/minmaxscaler.pkl') 
+abal_dl_scaler = joblib.load('Abal_DL_local_run_v1/joblib/StandardScaler.joblib')
+
+# 전복 모델 선택 옵션
+abalone_model_options = {
+    'Catboost': cat_model,
+#    'GradientBoost': gb_model,
+    'Artificial Neural Network': deep_abal_model
+} 
 
 # 별 딥러닝모델
 from model.star_model.final import star_deep_model
 
-
-# 별 머신러닝 최종모델(logistic)
 path_lg = 'model/star_model/final/ML_model2_pickle/lg_model.pkl'
 lg_model = joblib.load(path_lg)
 
 # 별 딥러닝 파일 불러오기(ANN)
 deep_model = star_deep_model.Model()
-
+ 
 # 별 모델 선택 옵션
 star_model_options = {
     'logistic': lg_model,
@@ -31,6 +53,17 @@ star_model_options = {
 # 별 스케일러(딥러닝/ 머신러닝 둘다 Standard)
 star_scaler = joblib.load('model/star_model/final/ML_model2_pickle/lg_scaler.pkl')
 
+# 강철 딥러닝모델
+path_steel = 'Steel_DL_B_local_run_v1/model_layers'
+deep_steel_model = keras.models.load_model(path_steel)
+
+# 강철 머신러닝 모델
+path_ml_steel = 'model/steel_model/final/ML_steel_pikling/xgb_model_multy.pkl'
+ml_steel_model = joblib.load(path_ml_steel)
+
+# 강철 스케일링(머신러닝/ 딥러닝)
+steel_dl_scaler = joblib.load('Steel_DL_B_local_run_v1/joblib/StandardScaler.joblib')
+steel_ml_scaler = joblib.load('model/steel_model/final/ML_steel_pikling/xgb_scaler_multy.pkl')
 
 # 나중에 파일 정리 이후, 상대 경로 지정해 쓸 것
 abal_datapath = 'data/abalone.csv'
@@ -164,7 +197,55 @@ if choose == "전복(Abalone)":
                 st.pyplot(plt)
 
     if selected_menu == "모델 예측":
-        st.write("모델 예측 성능이 들어갈 페이지입니다")
+        st.title('Abalone(전복 고리 예측)')
+        st.write('사용자로부터 전복 데이터에 대한 입력값을 받아 고리의 수(Rings)를 예측하는 모델입니다.')
+
+        selected_model = st.selectbox('모델 선택', list(abalone_model_options.keys()))
+
+        # 선택된 모델로 예측
+        select_model = abalone_model_options[selected_model]
+
+        # 입력값 받기
+        Sex = st.selectbox("Choose Sex: ", ['F', 'M', 'I'])
+        Length = st.text_input("Enter Length: ")
+        Diameter = st.text_input("Enter Diameter: ")
+        Height = st.text_input("Enter Height: ")
+        Whole_Weight = st.text_input("Enter Whole Weight: ")
+        Shucked_Weigh = st.text_input("Enter Shucked Weight: ")
+        Viscra_Weight = st.text_input("Enter Viscra Weight: ")
+        Shell_Weight = st.text_input("Enter Shell Weight: ")
+        Sex_F, Sex_I, Sex_M = 0, 0, 0
+    
+        if Sex == 'F':
+            Sex_F = 1
+        
+        elif Sex == 'I':
+            Sex_I = 1
+
+        elif Sex == 'M':
+            Sex_M = 1   
+
+        try:
+            input_list = [float(Length), float(Diameter), float(Height), float(Whole_Weight),
+                        float(Shucked_Weigh), float(Viscra_Weight), float(Shell_Weight), Sex_F, Sex_I, Sex_M]
+
+            input_data_2d = np.array(input_list).reshape(1, -1)
+        
+            input_data_MLscaled = abal_ml_scaler.transform(input_data_2d)
+            input_data_DLscaled = abal_dl_scaler.transfrom(input_data_2d)
+
+            # 예측
+            if select_model == cat_model:
+                prediction = select_model.predict(input_data_MLscaled)
+#            elif select_model == gb_model:
+#                prediction = select_model.predict(input_data_MLscaled)
+            else:
+                prediction = select_model.predict(input_data_DLscaled)
+
+            st.write(f'<div style="font-size: 36px; color: blue;">예측된 고리의 수는 {prediction}</div>')
+        
+        except Exception as e:
+            st.write(f'유효한 숫자를 입력하세요.{e}')
 
 
 if choose == "중성자별(Star)":
@@ -261,7 +342,7 @@ if choose == "중성자별(Star)":
                 st.pyplot(plt)
 
     if selected_menu == '모델 예측':
-        st.title('neutron star(중성자별)')
+        st.title('neutron star(중성자별 여부 예측)')
         st.write('사용자로부터 중성자별 데이터에 대한 입력값을 받아 중성자별을 예측하는 모델입니다.')
         # 모델 선택 드롭다운
         selected_model = st.selectbox('모델 선택', list(star_model_options.keys()))
@@ -423,7 +504,58 @@ if choose == "강판(Steel)":
 
 
     if selected_menu == '모델 예측':
-        pass
+        st.title('Steel(강철판 결함 예측)')
+        st.write('사용자로부터 강철판 결함 데이터에 대한 입력값을 받아 결함을 예측하는 모델입니다.')
+        st.write('이번 예측모델은 이진분류와 다중분류를 나누어 머신러닝/딥러닝 모델이 결합된 모델입니다.')
+        st.markdown('**이진분류로 진행을 하고 이진분류에서 1(강한결함)으로 예측되면 다중분류모델에 들어가 더욱 세밀하게 예측하는 모델입니다.**')
+
+        # 입력값 받기
+        Pixels_Areas = st.text_input("Enter Pixels_Areas: ")
+        X_Perimeter = st.text_input("Enter X_Perimeter: ")
+        Y_Perimeter = st.text_input("Enter Y_Perimeter: ")
+        Sum_of_Luminosity = st.text_input("Enter Sum_of_Luminosity: ")
+        Minimum_of_Luminosity = st.text_input("Enter Minimum_of_Luminosity: ")
+        Maximum_of_Luminosity = st.text_input("Enter Maximum_of_Luminosity: ")
+        Length_of_Conveyer = st.text_input("Enter Length_of_Conveyer: ")
+        TypeOfSteel = st.text_input("Enter TypeOfSteel(A300=0, A400=1): ")
+        Steel_Plate_Thickness = st.text_input("Enter Steel_Plate_Thickness: ")
+        Edges_Index = st.text_input("Enter Edges_Index: ")
+        Empty_Index = st.text_input("Enter Empty_Index: ")
+        Square_Index = st.text_input("Enter Square_Index: ")
+        Outside_X_Index = st.text_input("Enter Outside_X_Index: ")
+        Edges_X_Index = st.text_input("Enter Edges_X_Index: ")
+        Edges_Y_Index = st.text_input("Enter Edges_Y_Index: ")
+        LogOfAreas = st.text_input("Enter LogOfAreas: ")
+        Orientation_Index = st.text_input("Enter Orientation_Index: ")
+        Luminosity_Index = st.text_input("Enter Luminosity_Index: ")
+        SigmoidOfAreas = st.text_input("Enter SigmoidOfAreas: ")
+        Area = st.text_input("Enter Area: ")
+
+        try:
+            input_data = [[float(Pixels_Areas), float(X_Perimeter), float(Y_Perimeter), float(Sum_of_Luminosity),
+                            float(Minimum_of_Luminosity), float(Maximum_of_Luminosity), float(Length_of_Conveyer),
+                            float(TypeOfSteel), float(Steel_Plate_Thickness), float(Edges_Index), float(Empty_Index),
+                            float(Square_Index), float(Outside_X_Index), float(Edges_X_Index), float(Edges_Y_Index),
+                            float(LogOfAreas), float(Orientation_Index), float(Luminosity_Index), float(SigmoidOfAreas),
+                            float(Area)]]
+            
+            # 입력 데이터를 2차원 배열로 변환하여 스케일링
+            input_data_2d = np.array(input_data).reshape(1, -1)
+            
+            input_data_scaled = steel_dl_scaler.transform(input_data_2d)
+
+            # 예측
+            prediction = deep_steel_model.predict(input_data_scaled, verbose=0)
+
+            if prediction[0] == 0:
+                st.write(f'<div style="font-size: 36px; color: green;">예측 결과 : Other_Faults(약한결함) 입니다.</div>', unsafe_allow_html=True)
+            else:
+                input_data_scaled_ml = steel_ml_scaler.transform(input_data_2d)
+
+                prediction_ml = ml_steel_model.predict(input_data_scaled_ml)
                 
-    else:
-        pass
+                defect_list = ['Bumps', 'Dirtiness', 'K_Scatch', 'Pastry', 'Stains', 'Z_Scratch']
+
+                st.write(f'<div style="font-size: 36px; color: red;">예측 결과 : {defect_list[prediction_ml[0]]} 결함입니다.</div>', unsafe_allow_html=True)
+        except:
+            st.write('유효한 숫자를 입력하세요.')

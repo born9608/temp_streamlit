@@ -7,4 +7,7 @@ seaborn
 streamlit_option_menu
 joblib
 imbalanced-learn
-tensorflow
+tensorflow==2.13.0
+keras==2.13.1
+catboost
+xgboost
