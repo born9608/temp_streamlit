@@ -77,6 +77,8 @@ if choose == "전복(Abalone)":
 
 
         if selected_sub_menu == "특성 설명":
+            st.header("전복 데이터")
+
             # 그림 두개 그리기
             abal_col1, abal_col2 = st.columns(2)
             with abal_col1:
@@ -174,7 +176,7 @@ if choose == "중성자별(Star)":
                                                     "nav-link-selected": {"background-coloaddr": "#FFC939"},
                                                 })
         if selected_sub_menu == "특성 설명":
-            
+
             # 특성 설명
             st.header("중성자별 데이터")
             st.image("star.jpeg", use_column_width=True)
@@ -210,8 +212,12 @@ if choose == "중성자별(Star)":
     
 
         elif selected_sub_menu == "데이터 프레임 보기":
-            st.header("중상자별 데이터")
-            st.dataframe(df_abal)
+            with st.sidebar:
+                star_option = st.selectbox('확인하고 싶은 타겟을 선택하세요', df_star['target_class'].unique())
+            st.header("중성자별 데이터")
+            st.write('0이 중성자 별이 아니고 1이 중성자 별인 데이터프레임입니다.')
+            filtered_star_df = df_star[df_star['target_class'] == star_option]
+            st.dataframe(filtered_star_df)
 
         else:
             st.write("중성자별 데이터 인사이트가 들어갈 페이지입니다")
@@ -299,7 +305,7 @@ if choose == "강판(Steel)":
     graph_list = ['kdeplot', 'histplot', 'boxplot']
 
     if selected_menu == "데이터 설명":
-        selected_sub_menu = option_menu(None, ["특성 설명", '이진분류 데이터 보기', "다중분류 데이터 보기"],
+        selected_sub_menu = option_menu(None, ["특성 설명", '이진분류 데이터', "다중분류 데이터", "데이터 인사이트"],
                                         menu_icon="cast", default_index=0, orientation="horizontal", 
                                         styles = {"container": {"padding": "0!important", "background-color": "#fafafa"},
                                                     "nav-link": {"font-size": "15px", "text-align": "center", "margin":"10px", "--hover-color": "#FFE192"},
@@ -308,6 +314,7 @@ if choose == "강판(Steel)":
                                                 })
 
         if selected_sub_menu == "특성 설명":
+            st.header("강판 결함 데이터")
             st.image('steel.jpeg')
 
             
@@ -344,20 +351,25 @@ if choose == "강판(Steel)":
             st.markdown('- **SigmoidOfAreas** : 결함 영역의 픽셀 면적에 대한 시그모이드 값')
             st.markdown('- **Type** : 강철판 결함의 종류 (다중 분류를 위한 목표 변수) -> 이것도 원핫인코딩 형태를 하나의 컬럼으로 정의하고 라벨인코딩 실시)')
 
-        elif selected_sub_menu == "이진분류 데이터 보기":
+        elif selected_sub_menu == "이진분류 데이터":
             with st.sidebar:
                 binary_option = st.selectbox('확인하고 싶은 특성을 선택하세요', df_binary['Type'].unique())
             st.header("강판 결함")
             st.write('''0 -> weak_defect(약한 결함)
                     1 -> strong_defect(심한 결함)
                     ''')
-            st.dataframe(df_binary)
+            filtered_binary_df = df_binary[df_binary['Type'] == binary_option]
+            st.dataframe(filtered_binary_df)
 
-        else:
+        elif selected_sub_menu == "다중분류 데이터":
             with st.sidebar:
                 multi_option = st.selectbox('확인하고 싶은 특성을 선택하세요', df_multi['Type'].unique())
             st.header("강판 결함")
-            st.dataframe(df_multi)
+            filtered_multi_df = df_multi[df_multi['Type'] == multi_option]
+            st.dataframe(filtered_multi_df)
+
+        else:
+            st.write('강판 결함 데이터 인사이트가 들어갈 페이지입니다')
     
     if selected_menu == '데이터 시각화':
 
