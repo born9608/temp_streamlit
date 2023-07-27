@@ -339,19 +339,19 @@ if choose == "강판(Steel)":
             sns.histplot(data=df_multi, x=select_features, ax=ax2)
             ax2.set_title(f'Multi {select_features} Kernel')
             st.pyplot(fig)
-
-        if select_features == 'Type':
-            st.write(f'<div style="font-size: 20px; color: red;">{select_features}은 현재 문자열이므로 {select_graph}을 확인 할 수 없습니다.</div>', unsafe_allow_html=True)
-        
-        else:    
-            fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(15, 5))
-            sns.boxplot(data=df_binary, x=select_features, ax=ax1)
-            ax1.set_title(f'Binary {select_features} Kernel')
-            sns.boxplot(data=df_multi, x=select_features, ax=ax2)
-            ax2.set_title(f'Multi {select_features} Kernel')
-            st.pyplot(fig)
-
+        else:
+            if select_features == 'Type':
+                st.write(f'<div style="font-size: 20px; color: red;">{select_features}은 현재 문자열이므로 {select_graph}을 확인 할 수 없습니다.</div>', unsafe_allow_html=True)
+            else:
+                fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(15, 5))
+                sns.boxplot(data=df_binary, x=select_features, ax=ax1)
+                ax1.set_title(f'Binary {select_features} Kernel')
+                sns.boxplot(data=df_multi, x=select_features, ax=ax2)
+                ax2.set_title(f'Multi {select_features} Kernel')
+                st.pyplot(fig)
 
 
     if selected_menu == '모델 예측':
+        pass
+    else:
         pass
