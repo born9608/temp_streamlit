@@ -11,7 +11,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import LabelEncoder, StandardScaler
 from eda import abal_data_eda, steel_data_eda
 
-# from model.star_model.final import star_deep_model
+from model.star_model.final import star_deep_model
 
 
 # 별 머신러닝 최종모델(logistic)
@@ -19,12 +19,12 @@ path_lg = 'model/star_model/final/ML_model2_pickle/lg_model.pkl'
 lg_model = joblib.load(path_lg)
 
 # 별 딥러닝 파일 불러오기(ANN)
-# deep_model = star_deep_model.Model()
+deep_model = star_deep_model.Model()
 
 # 별 모델 선택 옵션
 star_model_options = {
     'logistic': lg_model,
-#    'Artificial Neural Network': deep_model
+    'Artificial Neural Network': deep_model
 }
 
 # 별 스케일러(딥러닝/ 머신러닝 둘다 Standard)
@@ -76,7 +76,7 @@ if choose == "전복(Abalone)":
             with abal_col1:
                 st.image("https://i0.wp.com/briantissot.com/wp-content/uploads/2014/09/john-exact-size100.jpg?ssl=1", use_column_width=True)
             with abal_col2:
-                st.image("http://www.lampcook.com/wi_files/food_story/seasonfood_sub_story/story4_4_1.jpg", use_column_width=True)
+                st.image("abalone.jpeg", use_column_width=True)
             
             st.markdown('- **Sex** : 전복 성별 / object : F, M, I로 구성되며 I는 유아기-전복은 자웅동체이다가 성숙하면서 성별이 고정되는 경향이 있다')
             st.markdown('- **Length** : 전복 길이 / mm / float : 껍질의 최대 길이를 의미 상단 그림 참고')
