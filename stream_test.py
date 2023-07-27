@@ -305,7 +305,8 @@ if choose == "강판(Steel)":
                                                     "icon": {"color": "orange", "font-size": "18px"}, 
                                                     "nav-link-selected": {"background-coloaddr": "#FFC939"},
                                                 })
-        
+        st.image('steel.jpeg')
+
         if selected_sub_menu == "특성 설명":
             st.write('X_Minimum: 결함이 있는 영역의 X 좌표 중 최소값 -> Area 만들고 제거')
             st.write('X_Maximum: 결함이 있는 영역의 X 좌표 중 최대값 -> Area 만들고 제거')
