@@ -75,7 +75,6 @@ if choose == "전복(Abalone)":
                                                     "nav-link-selected": {"background-coloaddr": "#FFC939"},
                                                 })
 
-
         if selected_sub_menu == "특성 설명":
             st.header("전복 데이터")
 
@@ -101,8 +100,14 @@ if choose == "전복(Abalone)":
             st.markdown('EDA를 위해 임시로 200을 곱해 확인한다')
 
         elif selected_sub_menu == "데이터 프레임 보기":
-            st.header("전복 데이터")
-            st.dataframe(df_abal)
+            st.header('전복 데이터')
+            with st.sidebar:   
+                values = st.slider(
+                    'Rings(target)에 맞춰 데이터를 확인하세요',
+                    0.0, 30.0, (10.0, 20.0))
+            
+            df_filtered = df_abal[(df_abal['Rings'] >= values[0]) & (df_abal['Rings'] <= values[1])]
+            st.dataframe(df_filtered)
 
         else:
             st.write("전복 데이터 인사이트가 들어갈 페이지입니다")
