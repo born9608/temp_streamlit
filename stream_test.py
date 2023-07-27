@@ -174,9 +174,7 @@ if choose == "중성자별(Star)":
                                                     "nav-link-selected": {"background-coloaddr": "#FFC939"},
                                                 })
         if selected_sub_menu == "특성 설명":
-            # star.jpeg 삽입
-            st.image("star.jpeg", use_column_width=True)
-
+            
             # 특성 설명
             st.header("중성자별 데이터")
             st.image("star.jpeg", use_column_width=True)
