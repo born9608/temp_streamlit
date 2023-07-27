@@ -232,7 +232,7 @@ if choose == "전복(Abalone)":
             input_data_2d = np.array(input_list).reshape(1, -1)
         
             input_data_MLscaled = abal_ml_scaler.transform(input_data_2d)
-            input_data_DLscaled = abal_dl_scaler.transfrom(input_data_2d)
+            input_data_DLscaled = abal_dl_scaler.transform(input_data_2d)
 
             # 예측
             if select_model == cat_model:
@@ -242,10 +242,10 @@ if choose == "전복(Abalone)":
             else:
                 prediction = select_model.predict(input_data_DLscaled)
 
-            st.write(f'<div style="font-size: 36px; color: blue;">예측된 고리의 수는 {prediction}</div>')
-        
-        except Exception as e:
-            st.write(f'유효한 숫자를 입력하세요.{e}')
+            st.write(f'<div style="font-size: 36px; color: blue;">예측된 고리의 수는 {prediction}</div>', unsafe_allow_html=True)
+
+        except:
+            st.write('유효한 숫자를 입력하세요.')
 
 
 if choose == "중성자별(Star)":
