@@ -11,7 +11,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import LabelEncoder, StandardScaler
 from eda import abal_data_eda, steel_data_eda
 
-from model.star_model.final.ML_model2_pickle import star_deep_model
+# from model.star_model.final import star_deep_model
 
 
 # 별 머신러닝 최종모델(logistic)
@@ -268,7 +268,7 @@ if choose == "강판(Steel)":
     # 이진, 다중분류 선택해서 쓰게 하기 위해
     binary_column_list = df_binary.columns.to_list()
     multi_column_list = df_multi.columns.to_list()
-    graph_list = ['kdeplot', 'histplot']
+    graph_list = ['kdeplot', 'histplot', 'boxplot']
     if selected_menu == "데이터 설명":
             st.header("강판 결함")
             st.image("steel.jpeg", use_column_width=True)
@@ -352,8 +352,6 @@ if choose == "강판(Steel)":
             st.pyplot(fig)
 
 
+
     if selected_menu == '모델 예측':
-        pass
-                
-    else:
         pass
