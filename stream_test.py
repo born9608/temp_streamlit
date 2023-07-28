@@ -13,7 +13,13 @@ from sklearn.preprocessing import LabelEncoder, StandardScaler
 from eda import abal_data_eda, steel_data_eda
 from Abal_DL_local_run_v1.EvalAccuracy import EvalAccuracy
 
-
+def is_float(n):
+    try:
+        float(n)
+        return True
+    except ValueError:
+        return False
+    
 # 전복 딥러닝모델
 path_abal = 'Abal_DL_local_run_v1/model_layers'
 deep_abal_model = keras.models.load_model(path_abal, custom_objects={"EvalAccuracy": EvalAccuracy})
@@ -225,27 +231,28 @@ if choose == "전복(Abalone)":
         elif Sex == 'M':
             Sex_M = 1   
 
-        try:
-            input_list = [float(Length), float(Diameter), float(Height), float(Whole_Weight),
-                        float(Shucked_Weigh), float(Viscra_Weight), float(Shell_Weight), Sex_F, Sex_I, Sex_M]
+        input_list = [Length, Diameter, Height, Whole_Weight, Shucked_Weigh, Viscra_Weight, Shell_Weight, Sex_F, Sex_I, Sex_M]
 
-            input_data_2d = np.array(input_list).reshape(1, -1)
-        
-            input_data_MLscaled = abal_ml_scaler.transform(input_data_2d)
-            input_data_DLscaled = abal_dl_scaler.transform(input_data_2d)
+        predict_button = st.button("예측하기")
 
-            # 예측
-            if select_model == cat_model:
-                prediction = select_model.predict(input_data_MLscaled)
-#            elif select_model == gb_model:
-#                prediction = select_model.predict(input_data_MLscaled)
+        if predict_button:
+            if all([is_float(n) for n in input_list[:7]]):  # 앞의 7개 값이 실수인지 확인합니다.
+                input_data_2d = np.array(input_list, dtype=float).reshape(1, -1)
+                input_data_MLscaled = abal_ml_scaler.transform(input_data_2d)
+                input_data_DLscaled = abal_dl_scaler.transform(input_data_2d)
+
+                # 예측
+                if select_model == cat_model:
+                    prediction = select_model.predict(input_data_MLscaled)
+                    # elif select_model == gb_model:
+                    #     prediction = select_model.predict(input_data_MLscaled)
+                else:
+                    prediction = select_model.predict(input_data_DLscaled)
+
+                st.write(f'<div style="font-size: 36px; color: blue;">예측된 고리의 수는 {prediction}</div>', unsafe_allow_html=True)
+
             else:
-                prediction = select_model.predict(input_data_DLscaled)
-
-            st.write(f'<div style="font-size: 36px; color: blue;">예측된 고리의 수는 {prediction}</div>', unsafe_allow_html=True)
-
-        except:
-            st.write('유효한 숫자를 입력하세요.')
+                st.write('유효한 숫자를 입력하세요.')
 
 
 if choose == "중성자별(Star)":
@@ -360,24 +367,28 @@ if choose == "중성자별(Star)":
         EK_curve = st.text_input("Enter Excess kurtosis of the DM-SNR curve: ")
         S_curve = st.text_input("Enter Skewness of the DM-SNR curve: ")
 
-        try:
-            input_data = [[float(Mean_i), float(SD_i), float(EK_i), float(S_i), float(Mean_curve),
-                        float(SD_curve), float(EK_curve), float(S_curve)]]
-            
-            input_data_scaled = star_scaler.transform(input_data)
 
-            # 예측
-            if select_model == lg_model:
-                prediction = select_model.predict(input_data_scaled)
-            else:
-                prediction = select_model.model.predict(input_data_scaled, verbose=0)
-            
-            if prediction[0] == 1:
-                st.write(f'<div style="font-size: 36px; color: red;">예측 결과 : 중성자별입니다</div>', unsafe_allow_html=True)
-            else:
-                st.write(f'<div style="font-size: 36px; color: green;">예측 결과 : 중성자별이 아닙니다</div>', unsafe_allow_html=True)
-        except:
-            st.write('유효한 숫자를 입력하세요.')
+        predict_button = st.button("예측하기")
+        
+        if predict_button:
+            try:
+                input_data = [[float(Mean_i), float(SD_i), float(EK_i), float(S_i), float(Mean_curve),
+                            float(SD_curve), float(EK_curve), float(S_curve)]]
+                
+                input_data_scaled = star_scaler.transform(input_data)
+
+                # 예측
+                if select_model == lg_model:
+                    prediction = select_model.predict(input_data_scaled)
+                else:
+                    prediction = select_model.model.predict(input_data_scaled, verbose=0)
+                
+                if prediction[0] == 1:
+                    st.write(f'<div style="font-size: 36px; color: red;">예측 결과 : 중성자별입니다</div>', unsafe_allow_html=True)
+                else:
+                    st.write(f'<div style="font-size: 36px; color: green;">예측 결과 : 중성자별이 아닙니다</div>', unsafe_allow_html=True)
+            except:
+                st.write('유효한 숫자를 입력하세요.')
 
 
 if choose == "강판(Steel)":
@@ -517,7 +528,7 @@ if choose == "강판(Steel)":
         Minimum_of_Luminosity = st.text_input("Enter Minimum_of_Luminosity: ")
         Maximum_of_Luminosity = st.text_input("Enter Maximum_of_Luminosity: ")
         Length_of_Conveyer = st.text_input("Enter Length_of_Conveyer: ")
-        TypeOfSteel = st.text_input("Enter TypeOfSteel(A300=0, A400=1): ")
+        TypeOfSteel = st.selectbox("Choose TypeOfSteel", options=[0, 1])
         Steel_Plate_Thickness = st.text_input("Enter Steel_Plate_Thickness: ")
         Edges_Index = st.text_input("Enter Edges_Index: ")
         Empty_Index = st.text_input("Enter Empty_Index: ")
@@ -531,31 +542,35 @@ if choose == "강판(Steel)":
         SigmoidOfAreas = st.text_input("Enter SigmoidOfAreas: ")
         Area = st.text_input("Enter Area: ")
 
-        try:
-            input_data = [[float(Pixels_Areas), float(X_Perimeter), float(Y_Perimeter), float(Sum_of_Luminosity),
-                            float(Minimum_of_Luminosity), float(Maximum_of_Luminosity), float(Length_of_Conveyer),
-                            float(TypeOfSteel), float(Steel_Plate_Thickness), float(Edges_Index), float(Empty_Index),
-                            float(Square_Index), float(Outside_X_Index), float(Edges_X_Index), float(Edges_Y_Index),
-                            float(LogOfAreas), float(Orientation_Index), float(Luminosity_Index), float(SigmoidOfAreas),
-                            float(Area)]]
+
+        predict_button = st.button("예측하기")
             
-            # 입력 데이터를 2차원 배열로 변환하여 스케일링
-            input_data_2d = np.array(input_data).reshape(1, -1)
-            
-            input_data_scaled = steel_dl_scaler.transform(input_data_2d)
-
-            # 예측
-            prediction = deep_steel_model.predict(input_data_scaled, verbose=0)
-
-            if prediction[0] == 0:
-                st.write(f'<div style="font-size: 36px; color: green;">예측 결과 : Other_Faults(약한결함) 입니다.</div>', unsafe_allow_html=True)
-            else:
-                input_data_scaled_ml = steel_ml_scaler.transform(input_data_2d)
-
-                prediction_ml = ml_steel_model.predict(input_data_scaled_ml)
+        if predict_button:
+            try:
+                input_data = [[float(Pixels_Areas), float(X_Perimeter), float(Y_Perimeter), float(Sum_of_Luminosity),
+                                float(Minimum_of_Luminosity), float(Maximum_of_Luminosity), float(Length_of_Conveyer),
+                                float(TypeOfSteel), float(Steel_Plate_Thickness), float(Edges_Index), float(Empty_Index),
+                                float(Square_Index), float(Outside_X_Index), float(Edges_X_Index), float(Edges_Y_Index),
+                                float(LogOfAreas), float(Orientation_Index), float(Luminosity_Index), float(SigmoidOfAreas),
+                                float(Area)]]
                 
-                defect_list = ['Bumps', 'Dirtiness', 'K_Scatch', 'Pastry', 'Stains', 'Z_Scratch']
+                # 입력 데이터를 2차원 배열로 변환하여 스케일링
+                input_data_2d = np.array(input_data).reshape(1, -1)
+                
+                input_data_scaled = steel_dl_scaler.transform(input_data_2d)
 
-                st.write(f'<div style="font-size: 36px; color: red;">예측 결과 : {defect_list[prediction_ml[0]]} 결함입니다.</div>', unsafe_allow_html=True)
-        except:
-            st.write('유효한 숫자를 입력하세요.')
+                # 예측
+                prediction = deep_steel_model.predict(input_data_scaled, verbose=0)
+
+                if prediction[0] == 0:
+                    st.write(f'<div style="font-size: 36px; color: green;">예측 결과 : Other_Faults(약한결함) 입니다.</div>', unsafe_allow_html=True)
+                else:
+                    input_data_scaled_ml = steel_ml_scaler.transform(input_data_2d)
+
+                    prediction_ml = ml_steel_model.predict(input_data_scaled_ml)
+                    
+                    defect_list = ['Bumps', 'Dirtiness', 'K_Scatch', 'Pastry', 'Stains', 'Z_Scratch']
+
+                    st.write(f'<div style="font-size: 36px; color: red;">예측 결과 : {defect_list[prediction_ml[0]]} 결함입니다.</div>', unsafe_allow_html=True)
+            except:
+                st.write('유효한 숫자를 입력하세요.')
