@@ -11,7 +11,7 @@ from streamlit_option_menu import option_menu
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import LabelEncoder, StandardScaler
 from eda import abal_data_eda, steel_data_eda
-from Abal_DL_local_run_v1.EvalAccuracy import EvalAccuracy
+from Abal_DL_local_run_v2.eval import get_Accuracy_tf
 
 def is_float(n):
     try:
@@ -21,24 +21,23 @@ def is_float(n):
         return False
 
 # 전복 딥러닝모델
-# path_abal = 'Abal_DL_local_run_v1/model_layers'
-# deep_abal_model = keras.models.load_model(path_abal, custom_objects={"EvalAccuracy": EvalAccuracy})
+path_abal = 'Abal_DL_local_run_v2/model_layers'
+deep_abal_model = keras.models.load_model(path_abal, custom_objects={"get_Accuracy_tf": get_Accuracy_tf})
 
-# 전복 머신러닝 모델(Catboost, Gradientboost)
+# 전복 머신러닝 모델
 path_cat = 'model/abalone_model/final/ML_model1_pickling/cat_model_v1.pkl'
 cat_model = joblib.load(path_cat)
-# path_gb = 'model/abalone_model/final/ML_model1_pickling/gbm_model_v1.pkl'
-# gb_model = joblib.load(path_gb)
+
 
 # 전복 스케일링(ML/DL)
 abal_ml_scaler = joblib.load('model/abalone_model/final/ML_model1_pickling/minmaxscaler.pkl') 
-abal_dl_scaler = joblib.load('Abal_DL_local_run_v1/joblib/StandardScaler.joblib')
+abal_dl_scaler = joblib.load('Abal_DL_local_run_v2/joblib/MinMaxScaler.joblib')
 
 # 전복 모델 선택 옵션
 abalone_model_options = {
     'Catboost': cat_model,
 #    'GradientBoost': gb_model,
-#    'Artificial Neural Network': deep_abal_model
+    'Artificial Neural Network': deep_abal_model
 } 
 
 # 별 딥러닝모델
@@ -239,15 +238,15 @@ if choose == "전복(Abalone)":
             if all([is_float(n) for n in input_list[:7]]):  # 앞의 7개 값이 실수인지 확인합니다.
                 input_data_2d = np.array(input_list, dtype=float).reshape(1, -1)
                 input_data_MLscaled = abal_ml_scaler.transform(input_data_2d)
-                # input_data_DLscaled = abal_dl_scaler.transform(input_data_2d)
+                input_data_DLscaled = abal_dl_scaler.transform(input_data_2d)
 
                 # 예측
                 if select_model == cat_model:
                     prediction = select_model.predict(input_data_MLscaled)
                     # elif select_model == gb_model:
                     #     prediction = select_model.predict(input_data_MLscaled)
-                #else:
-                #    prediction = select_model.predict(input_data_DLscaled)
+                else:
+                    prediction = select_model.predict(input_data_DLscaled)
 
                 st.write(f'<div style="font-size: 36px; color: blue;">예측된 고리의 수는 {prediction}</div>', unsafe_allow_html=True)
 
