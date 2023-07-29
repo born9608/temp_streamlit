@@ -212,13 +212,13 @@ if choose == "전복(Abalone)":
 
         # 입력값 받기
         Sex = st.selectbox("Choose Sex: ", ['F', 'M', 'I'])
-        Length = st.text_input("Enter Length: ")
-        Diameter = st.text_input("Enter Diameter: ")
-        Height = st.text_input("Enter Height: ")
-        Whole_Weight = st.text_input("Enter Whole Weight: ")
-        Shucked_Weigh = st.text_input("Enter Shucked Weight: ")
-        Viscra_Weight = st.text_input("Enter Viscra Weight: ")
-        Shell_Weight = st.text_input("Enter Shell Weight: ")
+        Length = st.slider("Enter Length(mm): ", min_value=float(df_abal['Length'].min()), max_value=float(df_abal['Length'].max()), value=(df_abal['Length'].min()+df_abal['Length'].max())/2)
+        Diameter = st.slider("Enter Diameter(mm): ", min_value=float(df_abal['Diameter'].min()), max_value=float(df_abal['Diameter'].max()), value=(df_abal['Diameter'].min()+df_abal['Diameter'].max())/2)
+        Height = st.slider("Enter Height(mm): ", min_value=float(df_abal['Height'].min()), max_value=float(df_abal['Height'].max()), value=(df_abal['Height'].min()+df_abal['Height'].max())/2)
+        Whole_Weight = st.slider("Enter Whole Weight(grams): ", min_value=float(df_abal['Whole weight'].min()), max_value=float(df_abal['Whole weight'].max()), value=(df_abal['Whole weight'].min()+df_abal['Whole weight'].max())/2)
+        Shucked_Weigh = st.slider("Enter Shucked Weight(grams): ", min_value=float(df_abal['Shucked weight'].min()), max_value=float(df_abal['Shucked weight'].max()), value=(df_abal['Shucked weight'].min()+df_abal['Shucked weight'].max())/2)
+        Viscra_Weight = st.slider("Enter Viscera Weight(grams): ", min_value=float(df_abal['Viscera weight'].min()), max_value=float(df_abal['Viscera weight'].max()), value=(df_abal['Viscera weight'].min()+df_abal['Viscera weight'].max())/2)
+        Shell_Weight = st.slider("Enter Shell Weight(grams): ", min_value=float(df_abal['Shell weight'].min()), max_value=float(df_abal['Shell weight'].max()), value=(df_abal['Shell weight'].min()+df_abal['Shell weight'].max())/2)
         Sex_F, Sex_I, Sex_M = 0, 0, 0
     
         if Sex == 'F':
@@ -357,14 +357,17 @@ if choose == "중성자별(Star)":
         select_model = star_model_options[selected_model]
 
         # 입력값 받기
-        Mean_i = st.text_input("Enter Mean of the integrated profile: ")
-        SD_i = st.text_input("Enter Standard deviation of the integrated profile: ")
-        EK_i = st.text_input("Enter Excess kurtosis of the integrated profile: ")
-        S_i = st.text_input("Enter Skewness of the integrated profile: ")
-        Mean_curve = st.text_input("Enter Mean of the DM-SNR curve: ")
-        SD_curve = st.text_input("Enter Standard deviation of the DM-SNR curve: ")
-        EK_curve = st.text_input("Enter Excess kurtosis of the DM-SNR curve: ")
-        S_curve = st.text_input("Enter Skewness of the DM-SNR curve: ")
+        # 슬라이더를 사용한 입력값 받기
+        Mean_i = st.slider("Enter Mean of the integrated profile: ", min_value=float(df_star[' Mean of the integrated profile'].min()), max_value=float(df_star[' Mean of the integrated profile'].max()), value=(df_star[' Mean of the integrated profile'].min()+df_star[' Mean of the integrated profile'].max())/2)
+        SD_i = st.slider("Enter Standard deviation of the integrated profile: ", min_value=float(df_star[' Standard deviation of the integrated profile'].min()), max_value=float(df_star[' Standard deviation of the integrated profile'].max()), value=(df_star[' Standard deviation of the integrated profile'].min()+df_star[' Standard deviation of the integrated profile'].max())/2)
+        EK_i = st.slider("Enter Excess kurtosis of the integrated profile: ", min_value=float(df_star[' Excess kurtosis of the integrated profile'].min()), max_value=float(df_star[' Excess kurtosis of the integrated profile'].max()), value=(df_star[' Excess kurtosis of the integrated profile'].min()+df_star[' Excess kurtosis of the integrated profile'].max())/2)
+        S_i = st.slider("Enter Skewness of the integrated profile: ", min_value=float(df_star[' Skewness of the integrated profile'].min()), max_value=float(df_star[' Skewness of the integrated profile'].max()), value=(df_star[' Skewness of the integrated profile'].min()+df_star[' Skewness of the integrated profile'].max())/2)
+
+        Mean_curve = st.slider("Enter Mean of the DM-SNR curve: ", min_value=float(df_star[' Mean of the DM-SNR curve'].min()), max_value=float(df_star[' Mean of the DM-SNR curve'].max()), value=(df_star[' Mean of the DM-SNR curve'].min()+df_star[' Mean of the DM-SNR curve'].max())/2)
+        SD_curve = st.slider("Enter Standard deviation of the DM-SNR curve: ", min_value=float(df_star[' Standard deviation of the DM-SNR curve'].min()), max_value=float(df_star[' Standard deviation of the DM-SNR curve'].max()), value=(df_star[' Standard deviation of the DM-SNR curve'].min()+df_star[' Standard deviation of the DM-SNR curve'].max())/2)
+        EK_curve = st.slider("Enter Excess kurtosis of the DM-SNR curve: ", min_value=float(df_star[' Excess kurtosis of the DM-SNR curve'].min()), max_value=float(df_star[' Excess kurtosis of the DM-SNR curve'].max()), value=(df_star[' Excess kurtosis of the DM-SNR curve'].min()+df_star[' Excess kurtosis of the DM-SNR curve'].max())/2)
+        S_curve = st.slider("Enter Skewness of the DM-SNR curve: ", min_value=float(df_star[' Skewness of the DM-SNR curve'].min()), max_value=float(df_star[' Skewness of the DM-SNR curve'].max()), value=(df_star[' Skewness of the DM-SNR curve'].min()+df_star[' Skewness of the DM-SNR curve'].max())/2)
+
 
 
         predict_button = st.button("예측하기")
@@ -520,26 +523,27 @@ if choose == "강판(Steel)":
         st.markdown('**이진분류로 진행을 하고 이진분류에서 1(강한결함)으로 예측되면 다중분류모델에 들어가 더욱 세밀하게 예측하는 모델입니다.**')
 
         # 입력값 받기
-        Pixels_Areas = st.text_input("Enter Pixels_Areas: ")
-        X_Perimeter = st.text_input("Enter X_Perimeter: ")
-        Y_Perimeter = st.text_input("Enter Y_Perimeter: ")
-        Sum_of_Luminosity = st.text_input("Enter Sum_of_Luminosity: ")
-        Minimum_of_Luminosity = st.text_input("Enter Minimum_of_Luminosity: ")
-        Maximum_of_Luminosity = st.text_input("Enter Maximum_of_Luminosity: ")
-        Length_of_Conveyer = st.text_input("Enter Length_of_Conveyer: ")
         TypeOfSteel = st.selectbox("Choose TypeOfSteel", options=[0, 1])
-        Steel_Plate_Thickness = st.text_input("Enter Steel_Plate_Thickness: ")
-        Edges_Index = st.text_input("Enter Edges_Index: ")
-        Empty_Index = st.text_input("Enter Empty_Index: ")
-        Square_Index = st.text_input("Enter Square_Index: ")
-        Outside_X_Index = st.text_input("Enter Outside_X_Index: ")
-        Edges_X_Index = st.text_input("Enter Edges_X_Index: ")
-        Edges_Y_Index = st.text_input("Enter Edges_Y_Index: ")
-        LogOfAreas = st.text_input("Enter LogOfAreas: ")
-        Orientation_Index = st.text_input("Enter Orientation_Index: ")
-        Luminosity_Index = st.text_input("Enter Luminosity_Index: ")
-        SigmoidOfAreas = st.text_input("Enter SigmoidOfAreas: ")
-        Area = st.text_input("Enter Area: ")
+        Pixels_Areas = st.slider("Enter Pixels_Areas: ", min_value=float(df_binary['Pixels_Areas'].min()), max_value=float(df_binary['Pixels_Areas'].max()), value=(df_binary['Pixels_Areas'].min()+df_binary['Pixels_Areas'].max())/2)
+        X_Perimeter = st.slider("Enter X_Perimeter: ", min_value=float(df_binary['X_Perimeter'].min()), max_value=float(df_binary['X_Perimeter'].max()), value=(df_binary['X_Perimeter'].min()+df_binary['X_Perimeter'].max())/2)
+        Y_Perimeter = st.slider("Enter Y_Perimeter: ", min_value=float(df_binary['Y_Perimeter'].min()), max_value=float(df_binary['Y_Perimeter'].max()), value=(df_binary['Y_Perimeter'].min()+df_binary['Y_Perimeter'].max())/2)
+        Sum_of_Luminosity = st.slider("Enter Sum_of_Luminosity: ", min_value=float(df_binary['Sum_of_Luminosity'].min()), max_value=float(df_binary['Sum_of_Luminosity'].max()), value=(df_binary['Sum_of_Luminosity'].min()+df_binary['Sum_of_Luminosity'].max())/2)
+        Minimum_of_Luminosity = st.slider("Enter Minimum_of_Luminosity: ", min_value=float(df_binary['Minimum_of_Luminosity'].min()), max_value=float(df_binary['Minimum_of_Luminosity'].max()), value=(df_binary['Minimum_of_Luminosity'].min()+df_binary['Minimum_of_Luminosity'].max())/2)
+        Maximum_of_Luminosity = st.slider("Enter Maximum_of_Luminosity: ", min_value=float(df_binary['Maximum_of_Luminosity'].min()), max_value=float(df_binary['Maximum_of_Luminosity'].max()), value=(df_binary['Maximum_of_Luminosity'].min()+df_binary['Maximum_of_Luminosity'].max())/2)
+        Length_of_Conveyer = st.slider("Enter Length_of_Conveyer: ", min_value=float(df_binary['Length_of_Conveyer'].min()), max_value=float(df_binary['Length_of_Conveyer'].max()), value=(df_binary['Length_of_Conveyer'].min()+df_binary['Length_of_Conveyer'].max())/2)
+        Steel_Plate_Thickness = st.slider("Enter Steel_Plate_Thickness: ", min_value=float(df_binary['Steel_Plate_Thickness'].min()), max_value=float(df_binary['Steel_Plate_Thickness'].max()), value=(df_binary['Steel_Plate_Thickness'].min()+df_binary['Steel_Plate_Thickness'].max())/2)
+        Edges_Index = st.slider("Enter Edges_Index: ", min_value=float(df_binary['Edges_Index'].min()), max_value=float(df_binary['Edges_Index'].max()), value=(df_binary['Edges_Index'].min()+df_binary['Edges_Index'].max())/2)
+        Empty_Index = st.slider("Enter Empty_Index: ", min_value=float(df_binary['Empty_Index'].min()), max_value=float(df_binary['Empty_Index'].max()), value=(df_binary['Empty_Index'].min()+df_binary['Empty_Index'].max())/2)
+        Square_Index = st.slider("Enter Square_Index: ", min_value=float(df_binary['Square_Index'].min()), max_value=float(df_binary['Square_Index'].max()), value=(df_binary['Square_Index'].min()+df_binary['Square_Index'].max())/2)
+        Outside_X_Index = st.slider("Enter Outside_X_Index: ", min_value=float(df_binary['Outside_X_Index'].min()), max_value=float(df_binary['Outside_X_Index'].max()), value=(df_binary['Outside_X_Index'].min()+df_binary['Outside_X_Index'].max())/2)
+        Edges_X_Index = st.slider("Enter Edges_X_Index: ", min_value=float(df_binary['Edges_X_Index'].min()), max_value=float(df_binary['Edges_X_Index'].max()), value=(df_binary['Edges_X_Index'].min()+df_binary['Edges_X_Index'].max())/2)
+        Edges_Y_Index = st.slider("Enter Edges_Y_Index: ", min_value=float(df_binary['Edges_Y_Index'].min()), max_value=float(df_binary['Edges_Y_Index'].max()), value=(df_binary['Edges_Y_Index'].min()+df_binary['Edges_Y_Index'].max())/2)
+        LogOfAreas = st.slider("Enter LogOfAreas: ", min_value=float(df_binary['LogOfAreas'].min()), max_value=float(df_binary['LogOfAreas'].max()), value=(df_binary['LogOfAreas'].min()+df_binary['LogOfAreas'].max())/2)
+        Orientation_Index = st.slider("Enter Orientation_Index: ", min_value=float(df_binary['Orientation_Index'].min()), max_value=float(df_binary['Orientation_Index'].max()), value=(df_binary['Orientation_Index'].min()+df_binary['Orientation_Index'].max())/2)
+        Luminosity_Index = st.slider("Enter Luminosity_Index: ", min_value=float(df_binary['Luminosity_Index'].min()), max_value=float(df_binary['Luminosity_Index'].max()), value=(df_binary['Luminosity_Index'].min()+df_binary['Luminosity_Index'].max())/2)
+        SigmoidOfAreas = st.slider("Enter SigmoidOfAreas: ", min_value=float(df_binary['SigmoidOfAreas'].min()), max_value=float(df_binary['SigmoidOfAreas'].max()), value=(df_binary['SigmoidOfAreas'].min()+df_binary['SigmoidOfAreas'].max())/2)
+        Area = st.slider("Enter Area: ", min_value=float(df_binary['Area'].min()), max_value=float(df_binary['Area'].max()), value=(df_binary['Area'].min()+df_binary['Area'].max())/2)
+
 
 
         predict_button = st.button("예측하기")
