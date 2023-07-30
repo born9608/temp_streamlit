@@ -118,24 +118,33 @@ if choose == "Home":
     image_placeholder.empty()
     st.balloons()
     
-    st.title("판교에서 만나요!?")
-    st.image('image\Pangyo_station_Exit.jpg')
+    st.image('image/Pangyo_station_Exit.jpg')
+    st.title("판교에서 만나요!? 팀")
+
     st.header("_프로젝트 소개_")
 
     st.markdown("##### 전복, 중성자별, 강판 경함 데이터를 기반으로 새로운 ML/DL 모델을 설계했습니다\n"
                 "###### 1. 전복 모델은 성별, 무게, 크기로 고리 수를 예측하고 나이를 추론하는 모델입니다\n"
-                "###### 2. 중성자별 모델은 별의 profile과 관측치로 중성자별 여부를 판단하는 모델입니다\n"
+                "###### 2. 중성자별 모델은 별의 Profile과 관측치로 중성자별 여부를 판단하는 모델입니다\n"
                 "###### 3. 강판 모델은 결함 검사 시 얻을 수 있는 여러 지표를 토대로 결함의 종류를 판단하는 혼합 모델입니다"
                 "경미한 결함은 이진분류 모델, 그 외의 결함은 다중분류 모델을 통해 분류합니다\n" 
                                 ,unsafe_allow_html=True)
     
-    st.divider()
-    st.subheader("이 웹페이지는")
-    st.markdown("###### 1. 모델 학습에 사용된 데이터셋의 개괄적인 정보를 제공합니다\n"
-                "###### 2. 데이터셋의 샘플 데이터와 특성 별 시각화 자료를 제공합니다\n"
-                "###### 3. 데이터 탐색으로 도출한 인사이트를 제공합니다\n"
-                "###### 4. 설계한 모델을 기반으로 간이 예측 기능을 제공합니다")
+    tab1, tab2, tab3 = st.tabs([":sunglasses:팀원 소개", ":toolbox:웹페이지 기능", ":timer_clock:프로젝트 플랜"])
 
+    with tab1:
+        st.subheader("공교롭게도 판교에 취업하고 싶은 남자 넷이 모였습니다")
+
+    with tab2:
+        st.subheader("_이 웹페이지는_")
+        st.markdown("###### 1. 모델 학습에 사용된 데이터셋의 개괄적인 정보를 제공합니다\n"
+                    "###### 2. 데이터셋의 샘플 데이터와 특성 별 시각화 자료를 제공합니다\n"
+                    "###### 3. 데이터 탐색으로 도출한 인사이트를 제공합니다\n"
+                    "###### 4. 설계한 모델을 기반으로 간이 예측 기능을 제공합니다")
+    
+    with tab3:
+        st.subheader("_Project progress_")
+        st.image('image/project_progress.gif')
     
 # 모델 학습에 사용된 데이터의 정보, 샘플, 인사이트와 모델을 통한 간이 예측 기능을 제공합니다_
 
