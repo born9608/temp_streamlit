@@ -1,3 +1,5 @@
+import time 
+
 import streamlit as st
 import pandas as pd
 import numpy as np
@@ -82,6 +84,8 @@ df_abal = abal_data_eda(abal_datapath)
 df_star = pd.read_csv(star_datapath)
 df_binary, df_multi = steel_data_eda(steel_datapath)
 
+
+
 with st.sidebar:
     choose = option_menu("판교에서 만나요", ["Home", "전복(Abalone)", "중성자별(Star)", "강판(Steel)"],
                          icons=['bi bi-house', 'bi bi-droplet', 'star', 'bi bi-ticket-fill'],
@@ -95,7 +99,42 @@ with st.sidebar:
 )
 
 if choose == "Home":
-    st.write("홈 화면이 구성될 페이지입니다")
+    # 로딩바
+    latest_iteration = st.empty()
+    bar = st.progress(0)
+    image_placeholder = st.empty()
+    image_placeholder.image('image/road_to_pangyo.jpeg')
+
+    for i in range(100):
+        # 로딩바
+        latest_iteration.text(f'지금 만나러 갑니다 {i+1}')
+        bar.progress(i + 1)
+        time.sleep(0.02)
+        # 0.05 초 마다 1씩증가
+    # 완료 시 로딩바 없어지면서 풍선 이펙트 보여주기 
+
+    latest_iteration.empty()
+    bar.empty()
+    image_placeholder.empty()
+    st.balloons()
+    
+    st.title("판교에서 만나요!?")
+    st.image('image/pangyo.jpg')
+    st.header("프로젝트 소개")
+
+    st.markdown("##### 전복, 중성자별, 강판 관련 데이터를 전처리해 새로운 ML/DL 모델을 설계했습니다\n"
+                "###### 1. 전복 모델은 성별, 무게, 크기로 고리 수를 예측하고 나이를 추론하는 회귀 딥러닝 모델입니다\n"
+                "###### 2. 중성자별 모델은 별의 profile과 관측치로 중성자별인지 판단하는 이진분류 머신러닝 모델입니다\n"
+                "###### 3. 강판 모델은 결함 검사 시 얻을 수 있는 여러 지표를 토대로 결함의 종류를 판단하는 혼합 모델입니다"
+                "경미한 결함을 이진분류 딥러닝 모델으로, 그 외의 결함은 다중분류 머신러닝 모델을 통해 분류합니다" 
+                "<br>"
+                "<br>"
+                "<h5> 이 웹페이지는 모델 학습에 사용된 데이터의 샘플과 모델을 통한 간이 예측 기능을 제공합니다",
+                                unsafe_allow_html=True)
+
+    
+
+
 
 if choose == "전복(Abalone)":
     selected_menu = option_menu(None, ["데이터 설명", '데이터 시각화', "모델 예측"],
@@ -121,7 +160,7 @@ if choose == "전복(Abalone)":
             with abal_col1:
                 st.image("https://i0.wp.com/briantissot.com/wp-content/uploads/2014/09/john-exact-size100.jpg?ssl=1", use_column_width=True)
             with abal_col2:
-                st.image("abalone.jpeg", use_column_width=True)
+                st.image("image/abalone.jpeg", use_column_width=True)
             
             # 특성 설명
             st.markdown('- **Sex** : 전복 성별 / object : F, M, I로 구성되며 I는 유아기-전복은 자웅동체이다가 성숙하면서 성별이 고정되는 경향이 있다')
@@ -271,7 +310,7 @@ if choose == "중성자별(Star)":
 
             # 특성 설명
             st.header("중성자별 데이터")
-            st.image("star.jpeg", use_column_width=True)
+            st.image("image/star.jpeg", use_column_width=True)
             st.markdown('- **Mean of the Integrated Profile (통합 프로파일의 평균)**')
             st.write('통합 프로파일에서 얻은 측정값들의 평균값을 나타냅니다.')
             st.write('통합 프로파일에서 얻은 측정값들의 평균값을 나타냅니다.')
@@ -305,10 +344,11 @@ if choose == "중성자별(Star)":
 
         elif selected_sub_menu == "데이터 프레임 보기":
             with st.sidebar:
-                star_option = st.selectbox('확인하고 싶은 타겟을 선택하세요', df_star['target_class'].unique())
+                star_pulsar_dict = {'Not Pulsar': 0, 'Pulsar': 1}
+                star_option = st.selectbox('중성자별 여부에 따른 데이터셋을 확인하세요', options = list(star_pulsar_dict.keys()))
+
             st.header("중성자별 데이터")
-            st.write('0이 중성자 별이 아니고 1이 중성자 별인 데이터프레임입니다.')
-            filtered_star_df = df_star[df_star['target_class'] == star_option]
+            filtered_star_df = df_star[df_star['target_class'] == star_pulsar_dict[star_option]]
             st.dataframe(filtered_star_df)
 
         else:
@@ -414,7 +454,7 @@ if choose == "강판(Steel)":
 
         if selected_sub_menu == "특성 설명":
             st.header("강판 결함 데이터")
-            st.image('steel.jpeg')
+            st.image('image/steel.jpeg')
 
             
             st.markdown('- **X_Minimum** : 결함이 있는 영역의 X 좌표 중 최소값 -> Area 만들고 제거')
@@ -452,12 +492,12 @@ if choose == "강판(Steel)":
 
         elif selected_sub_menu == "이진분류 데이터":
             with st.sidebar:
-                binary_option = st.selectbox('확인하고 싶은 특성을 선택하세요', df_binary['Type'].unique())
+                bin_dict = {'기타 결함': 0, '일반 결함': 1}
+                binary_option = st.selectbox('기타 결험과 일반 결함 데이터를 확인하세요', options=list(bin_dict.keys()))
+                
             st.header("강판 결함")
-            st.write('''0 -> weak_defect(약한 결함)
-                    1 -> strong_defect(심한 결함)
-                    ''')
-            filtered_binary_df = df_binary[df_binary['Type'] == binary_option]
+
+            filtered_binary_df = df_binary[df_binary['Type'] == bin_dict[binary_option]]
             st.dataframe(filtered_binary_df)
 
         elif selected_sub_menu == "다중분류 데이터":
