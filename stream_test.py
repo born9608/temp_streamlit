@@ -119,21 +119,25 @@ if choose == "Home":
     st.balloons()
     
     st.title("판교에서 만나요!?")
-    st.image('image/pangyo.jpg')
-    st.header("프로젝트 소개")
+    st.image('image\Pangyo_station_Exit.jpg')
+    st.header("_프로젝트 소개_")
 
-    st.markdown("##### 전복, 중성자별, 강판 관련 데이터를 전처리해 새로운 ML/DL 모델을 설계했습니다\n"
-                "###### 1. 전복 모델은 성별, 무게, 크기로 고리 수를 예측하고 나이를 추론하는 회귀 딥러닝 모델입니다\n"
-                "###### 2. 중성자별 모델은 별의 profile과 관측치로 중성자별인지 판단하는 이진분류 머신러닝 모델입니다\n"
+    st.markdown("##### 전복, 중성자별, 강판 경함 데이터를 기반으로 새로운 ML/DL 모델을 설계했습니다\n"
+                "###### 1. 전복 모델은 성별, 무게, 크기로 고리 수를 예측하고 나이를 추론하는 모델입니다\n"
+                "###### 2. 중성자별 모델은 별의 profile과 관측치로 중성자별 여부를 판단하는 모델입니다\n"
                 "###### 3. 강판 모델은 결함 검사 시 얻을 수 있는 여러 지표를 토대로 결함의 종류를 판단하는 혼합 모델입니다"
-                "경미한 결함을 이진분류 딥러닝 모델으로, 그 외의 결함은 다중분류 머신러닝 모델을 통해 분류합니다" 
-                "<br>"
-                "<br>"
-                "<h5> 이 웹페이지는 모델 학습에 사용된 데이터의 샘플과 모델을 통한 간이 예측 기능을 제공합니다",
-                                unsafe_allow_html=True)
+                "경미한 결함은 이진분류 모델, 그 외의 결함은 다중분류 모델을 통해 분류합니다\n" 
+                                ,unsafe_allow_html=True)
+    
+    st.divider()
+    st.subheader("이 웹페이지는")
+    st.markdown("###### 1. 모델 학습에 사용된 데이터셋의 개괄적인 정보를 제공합니다\n"
+                "###### 2. 데이터셋의 샘플 데이터와 특성 별 시각화 자료를 제공합니다\n"
+                "###### 3. 데이터 탐색으로 도출한 인사이트를 제공합니다\n"
+                "###### 4. 설계한 모델을 기반으로 간이 예측 기능을 제공합니다")
 
     
-
+# 모델 학습에 사용된 데이터의 정보, 샘플, 인사이트와 모델을 통한 간이 예측 기능을 제공합니다_
 
 
 if choose == "전복(Abalone)":
@@ -144,7 +148,7 @@ if choose == "전복(Abalone)":
     columns_list =  df_abal.columns.to_list()
 
     if selected_menu == "데이터 설명":
-        selected_sub_menu = option_menu(None, ["특성 설명", "데이터 프레임 보기", "데이터 인사이트"],
+        selected_sub_menu = option_menu(None, ["특성 설명", "샘플 데이터", "데이터 인사이트"],
                                         menu_icon="cast", default_index=0, orientation="horizontal", 
                                         styles = {"container": {"padding": "0!important", "background-color": "#fafafa"},
                                                     "nav-link": {"font-size": "15px", "text-align": "center", "margin":"10px", "--hover-color": "#FFE192"},
@@ -163,7 +167,7 @@ if choose == "전복(Abalone)":
                 st.image("image/abalone.jpeg", use_column_width=True)
             
             # 특성 설명
-            st.markdown('- **Sex** : 전복 성별 / object : F, M, I로 구성되며 I는 유아기-전복은 자웅동체이다가 성숙하면서 성별이 고정되는 경향이 있다')
+            st.markdown('- **Sex** : 전복 성별 / object / F, M, I 중 하나의 값을 가진다. 유아기인 경우 I로 표시한다, 미성숙한 전복은 자웅동체이기 때문이다')
             st.markdown('- **Length** : 전복 길이 / mm / float : 껍질의 최대 길이를 의미 상단 그림 참고')
             st.markdown('- **Diameter** : 전복 지름 / mm / float : Length를 쟀을 때와 수직으로 잴 때의 길이를 말함')
             st.markdown('- **Height** : 전복 길이 / mm / float : 높이(with meat in shell)를 말함')
@@ -172,12 +176,9 @@ if choose == "전복(Abalone)":
             st.markdown('- **Viscra Weight** : 내장 무게 / grams / float : 피를 빼고 측정')
             st.markdown('- **Shell Weight** : 껍질 무게 / grams / float : 건조한 뒤 껍질의 무게')
             st.markdown('- **Rings(Target)** : 전복 나이 / int : 일반적으로 껍질의 고리(Ring)수를 통해 나이를 판단한다')
-            st.markdown('- **특이사항**')
-            st.markdown('연속성을 가지는 특성(성별과 나이를 제외한)은 원 수치에 200을 나눈 값이라 한다')
-            st.markdown('EDA를 위해 임시로 200을 곱해 확인한다')
 
-        elif selected_sub_menu == "데이터 프레임 보기":
-            st.header('전복 데이터')
+        elif selected_sub_menu == "샘플 데이터":
+            st.header('전복 샘플 데이터')
             with st.sidebar:   
                 values = st.slider(
                     'Rings(target)에 맞춰 데이터를 확인하세요',
@@ -187,7 +188,17 @@ if choose == "전복(Abalone)":
             st.dataframe(df_filtered)
 
         else:
-            st.write("전복 데이터 인사이트가 들어갈 페이지입니다")
+            st.header('전복 데이터 인사이트')
+            st.markdown("전복 데이터의 특성은 예측해야할 특성(나이)을 제외하면 8개이며 성별 특성, 크기 특성, 무게 특성 세갈래로 구분할 수 있습니다.(크기 특성: 길이, 직경, 높이 / 무게 특성: 전체 무게, 내장 무게, 껍질 무게, 껍질 제외한 무게)<br>"
+                        "<br>"
+                        "같은 갈래로 묶인 특성은 타겟(Rings)과 산점도를 그릴 때 매우 비슷한 분포를 보였습니다. 따라서 모델을 학습할 때 각 갈래의 대표가 될 특성을 하나씩 뽑아 데이터셋을 구성하는 시도를 했습니다, 그러나 데이터셋의 사이즈(4177X9)가 작다는 명확한 한계가 존재했기 때문에 이런 접근이 큰 효과를 발휘하지 못했습니다.<br>"
+                        "<br>"
+                        "전복은 유아기(Infant)에 자웅동체이며 성숙해감에 따라 성별이 고정되는 생태적 특징이 있는데 이는 데이터 분석과정에서도 확인할 수 있었습니다. 성별 특성을 원핫 인코딩 후 상관관계를 분석하면 Female, Male보다 Infant가 Rings와 더 높은 상관관계를 가집니다. 따라서 Infant인 데이터를 예측할 때 정확도가 높을 것으로 예상됩니다.<br>" 
+                        "<br>"
+                        "앞서 언급한대로 전복 데이터셋에 있는 특성들은 큰 틀에서 3가지로 나뉘고 그마저 크기 특성, 무게 특성은 비슷한 양태를 보입니다. 따라서 색깔, 종, 서식지 등 쉽게 측정가능하고 기록에 용이한 특성들을 추가해 데이터셋을 확장한다면 과적합 해소가 용이해질 것이고 모델 성능은 크게 개선될 것으로 사료됩니다.",
+                                                        unsafe_allow_html=True)
+            st.image('image/abal_venn.png')
+
 
     if selected_menu == "데이터 시각화":
         st.title('특성 별 분포 및 시각화')
@@ -299,7 +310,7 @@ if choose == "중성자별(Star)":
                                 menu_icon="cast", default_index=0, orientation="horizontal")
 
     if selected_menu == "데이터 설명":
-        selected_sub_menu = option_menu(None, ["특성 설명", "데이터 프레임 보기", "데이터 인사이트"],
+        selected_sub_menu = option_menu(None, ["특성 설명", "샘플 데이터", "데이터 인사이트"],
                                         menu_icon="cast", default_index=0, orientation="horizontal", 
                                         styles = {"container": {"padding": "0!important", "background-color": "#fafafa"},
                                                     "nav-link": {"font-size": "15px", "text-align": "center", "margin":"10px", "--hover-color": "#FFE192"},
@@ -313,46 +324,46 @@ if choose == "중성자별(Star)":
             st.image("image/star.jpeg", use_column_width=True)
             st.markdown('- **Mean of the Integrated Profile (통합 프로파일의 평균)**')
             st.write('통합 프로파일에서 얻은 측정값들의 평균값을 나타냅니다.')
-            st.write('통합 프로파일에서 얻은 측정값들의 평균값을 나타냅니다.')
-            st.write('통합 프로파일은 여러 개의 라디오 펄스를 하나로 통합한 것으로, 천체의 특성을 반영하는 신호들이 포함되어 있습니다.')
-            st.write('이 평균값은 천체의 펄스 특성을 나타내는 중심적인 측정치입니다.')
+            st.write('통합 프로파일은 여러 개의 라디오 펄스를 하나로 통합한 것으로, 천체의 특성을 반영하는 신호들이 포함되어 있습니다. 이 평균값은 천체의 펄스 특성을 나타내는 중심적인 측정치입니다.')
             st.markdown('- **Standard Deviation of the Integrated Profile (통합 프로파일의 표준 편차)**')
-            st.write('통합 프로파일에서 얻은 측정값들의 편차 또는 산포를 나타냅니다.')
-            st.write('평균값으로부터 얼마나 떨어져 있는지를 평가하여 데이터의 퍼짐 정도를 표현합니다.')
-            st.write('표준 편차가 크면 천체의 펄스 강도가 불규칙적으로 변하는 것을 의미할 수 있습니다.')
+            st.write('통합 프로파일에서 얻은 측정값들의 편차 또는 산포를 나타냅니다. 펄스 강도가 불규칙적일수록 표준 편차가 증가합니다.')
             st.markdown('- **Excess Kurtosis of the Integrated Profile (통합 프로파일의 첨도)**')
-            st.write('첨도는 확률 변수의 분포에서 꼬리 부분의 상대적인 두께를 나타내는 지표로서, 데이터가 정규 분포에서 얼마나 벗어난 분포를 갖고 있는지를 나타냅니다.')
-            st.write('첨도가 0보다 크면 뾰족한 분포로, 0보다 작으면 완만한 분포로 해석할 수 있습니다.')
+            st.write('첨도는 확률 변수의 분포에서 꼬리 부분의 상대적인 두께를 나타내며 정규 분포에서 얼마나 벗어났는지 판단하는 지표입니다. 첨도가 0보다 크면 뾰족한 분포로, 0보다 작으면 완만한 분포로 해석할 수 있습니다.')
             st.markdown('- **Skewness of the Integrated Profile (통합 프로파일의 비대칭도)**')
-            st.write('데이터의 비대칭 정도를 나타내는 지표로서, 평균을 기준으로 얼마나 좌우로 치우쳐져 있는지를 나타냅니다.')
-            st.write('양수면 오른쪽으로, 음수면 왼쪽으로 치우쳐진 분포를 의미합니다.')
+            st.write('데이터의 비대칭 정도를 나타내는 지표로서, 평균을 기준으로 얼마나 좌우로 치우쳐져 있는지를 나타냅니다.양수면 오른쪽으로, 음수면 왼쪽으로 치우쳐진 분포를 의미합니다.')
             st.markdown('- **Mean of the DM-SNR Curve (DM-SNR 곡선의 평균)**')
-            st.write('DM-SNR 곡선은 주기성이 있는 신호에서 찾아지는 신호 대 잡음 비율(DM-SNR) 값을 나타내는 곡선입니다.')
-            st.write('이 곡선에서 추출한 측정값들의 평균을 나타냅니다.')
+            st.write('DM-SNR 곡선은 주기성이 있는 신호에서 찾아지는 신호 대 잡음 비율(DM-SNR) 값을 나타내는 곡선이며 이 특성은 해당 곡선의 평균값입니다')
             st.markdown('- **Standard Deviation of the DM-SNR Curve (DM-SNR 곡선의 표준 편차)**')
             st.write('DM-SNR 곡선에서 추출한 측정값들의 편차 또는 산포를 나타냅니다.')
-            st.write('평균값으로부터 얼마나 떨어져 있는지를 평가하여 데이터의 퍼짐 정도를 표현합니다.')
             st.markdown('- **Excess Kurtosis of the DM-SNR Curve (DM-SNR 곡선의 첨도)**')
             st.write('DM-SNR 곡선에서 추출한 측정값들의 첨도를 나타냅니다.')
-            st.write('이 값이 0보다 크면 뾰족한 분포로, 0보다 작으면 완만한 분포로 해석할 수 있습니다.')
             st.markdown('- **Skewness of the DM-SNR Curve (DM-SNR 곡선의 비대칭도)**')
             st.write('DM-SNR 곡선에서 추출한 측정값들의 비대칭 정도를 나타냅니다.')
-            st.write('양수면 오른쪽으로, 음수면 왼쪽으로 치우쳐진 분포를 의미합니다.')
             st.markdown('- **traget_class**')
-            st.write('1인 경우 중성자별, 0인 경우 중성자별 X')
+            st.write('1이면 중성자별이며 0인 경우 중성자별이 아닙니다.')
     
 
-        elif selected_sub_menu == "데이터 프레임 보기":
+        elif selected_sub_menu == "샘플 데이터":
             with st.sidebar:
                 star_pulsar_dict = {'Not Pulsar': 0, 'Pulsar': 1}
                 star_option = st.selectbox('중성자별 여부에 따른 데이터셋을 확인하세요', options = list(star_pulsar_dict.keys()))
 
-            st.header("중성자별 데이터")
+            st.header("중성자별 샘플 데이터")
             filtered_star_df = df_star[df_star['target_class'] == star_pulsar_dict[star_option]]
             st.dataframe(filtered_star_df)
 
         else:
-            st.write("중성자별 데이터 인사이트가 들어갈 페이지입니다")
+            st.header("중성자별 데이터 인사이트")
+            st.markdown("중상자별 데이터는 별의 통합 프로파일(Integrated Profile) 4개와 별의 라디오 신호를 그래픽으로 나타낸 DM-SNR Curve에서 도출한 4개의 특성으로 구성돼있습니다. 이번 프로젝트에서 8개 특성을 기반으로 중성자별 여부를 판단하는 모델을 만들었습니다<br>"
+                        "<br>"
+                        "중성자별은 일반적인 항성들과 매우 다른 성질을 가집니다. 첫째, 질량 대비 밀도가 매우 높습니다, 정면에서 별을 관측할 때 뒷면을 확인할 수 있을 정도로 중력이 큽니다. 둘째, 안정되지 않는 광원입니다, 방향에 따라 별의 세기가 다르고 초당 1회 이상 자전하기 때문에 관측 시 일관성이 매우 떨어집니다<br>"
+                        "<br>"
+                        "해당 데이터셋의 특성 별 BoxPlot을 확인하면 이상치처럼 보이는 데이터를 다수 발견할 수 있습니다, 그러나 단순 이상치라고 간주해 제거하기엔 수가 많으며 일정한 양상이 전혀 보이지 않습니다. "
+                        "이상치로 보이는 데이터를 분석하면 대체로 중성자별이었으며 정상적인 분포를 보인 데이터는 대체로 중성자별이 아니었습니다. 이는 중성자별의 성질을 고려할 때 타당한 일입니다.<br>"
+                        "<br>"
+                        "이 데이터셋에서 일반별과 중성자별의 비율은 9:1 입니다. 그러나 두드러지게 이상한 특성값을 여러개 보유하는 중성자별의 양태를 고려할 때 업샘플링이 필수는 아닌 것으로 보입니다"
+                        ,unsafe_allow_html=True)
+            st.image("image/double_pulsar.gif", use_column_width=True)
 
 
     if selected_menu == "데이터 시각화":
@@ -457,13 +468,12 @@ if choose == "강판(Steel)":
             st.image('image/steel.jpeg')
 
             
-            st.markdown('- **X_Minimum** : 결함이 있는 영역의 X 좌표 중 최소값 -> Area 만들고 제거')
-            st.markdown('- **X_Maximum** : 결함이 있는 영역의 X 좌표 중 최대값 -> Area 만들고 제거')
-            st.markdown('- **Y_Minimum** : 결함이 있는 영역의 Y 좌표 중 최소값 -> Area 만들고 제거')
-            st.markdown('- **Y_Maximum** : 결함이 있는 영역의 Y 좌표 중 최대값 -> Area 만들고 제거')
+            st.markdown('- **X_Minimum** : 결함이 있는 영역의 X 좌표 중 최소값(전처리 과정에서 Area 특성을 생성하고 제거)')
+            st.markdown('- **X_Maximum** : 결함이 있는 영역의 X 좌표 중 최대값(위와 동일)')
+            st.markdown('- **Y_Minimum** : 결함이 있는 영역의 Y 좌표 중 최소값(위와 동일)')
+            st.markdown('- **Y_Maximum** : 결함이 있는 영역의 Y 좌표 중 최대값(위와 동일)')
             st.markdown("- **Area** : 위의 4가지를 조합해서 새로만든 컬럼")
-            st.markdown('- **너비 공식**')
-            st.markdown("**('X_Maximum' - 'X_Minimum') * ('Y_Maximum' - 'Y_Minimum')**")
+            st.markdown("_Area(산출 공식)_ = ('X_Maximum' - 'X_Minimum') * ('Y_Maximum' - 'Y_Minimum')")
             st.markdown('- **Pixels_Areas** : 결함이 있는 영역의 픽셀 면적')
             st.markdown('- **X_Perimeter** : 결함이 있는 영역의 X 방향 둘레 길이')
             st.markdown('- **Y_Perimeter** : 결함이 있는 영역의 Y 방향 둘레 길이')
@@ -488,14 +498,14 @@ if choose == "강판(Steel)":
             st.markdown('- **Orientation_Index** : 결함 영역의 방향 인덱스')
             st.markdown('- **Luminosity_Index** : 결함 영역의 밝기 인덱스')
             st.markdown('- **SigmoidOfAreas** : 결함 영역의 픽셀 면적에 대한 시그모이드 값')
-            st.markdown('- **Type** : 강철판 결함의 종류 (다중 분류를 위한 목표 변수) -> 이것도 원핫인코딩 형태를 하나의 컬럼으로 정의하고 라벨인코딩 실시)')
+            st.markdown('- **Type** : 강철판 결함의 종류 (다중 분류를 위한 목표 변수). 원핫인코딩 형태를 하나의 컬럼으로 정의하고 라벨인코딩 실시함')
 
         elif selected_sub_menu == "이진분류 데이터":
             with st.sidebar:
                 bin_dict = {'기타 결함': 0, '일반 결함': 1}
                 binary_option = st.selectbox('기타 결험과 일반 결함 데이터를 확인하세요', options=list(bin_dict.keys()))
                 
-            st.header("강판 결함")
+            st.header("강판 결함 이진분류 데이터")
 
             filtered_binary_df = df_binary[df_binary['Type'] == bin_dict[binary_option]]
             st.dataframe(filtered_binary_df)
@@ -503,13 +513,20 @@ if choose == "강판(Steel)":
         elif selected_sub_menu == "다중분류 데이터":
             with st.sidebar:
                 multi_option = st.selectbox('확인하고 싶은 특성을 선택하세요', df_multi['Type'].unique())
-            st.header("강판 결함")
+            st.header("강판 결함 다중분류 데이터")
             filtered_multi_df = df_multi[df_multi['Type'] == multi_option]
             st.dataframe(filtered_multi_df)
 
         else:
-            st.write('강판 결함 데이터 인사이트가 들어갈 페이지입니다')
-    
+            st.header('강판 결함 데이터 인사이트')
+            st.markdown("강판 결함 데이터는 결함의 위치, 밝기, 둘레, 넓이, 강판의 종류 등 27개의 특성으로 구성돼 있습니다. 강판 결함에 대한 많은 특성을 기반으로 결함의 종류를 판단하는 다중 분류 모델을 만들었습니다.<br>"
+                        "<br>"
+                        "결함의 종류 중 기타 결함(other_faults) 데이터는 결함의 양상이 일관되지 않고 복합적이었습니다. 이름이 기타 결함인만큼 주요한 결함으로 분류되지 않는 것이 다수 포함된 것으로 판단했습니다.<br>"
+                        "<br>"
+                        "문제는 기타 결함의 비중이 전체 데이터셋의 1/3에 달한다는 것입니다. 모든 데이터를 학습한다면 기타 결함으로 인해 다중 분류 정확도가 떨어질 수 있다고 판단했습니다. 따라서 이진분류로 기타 결함을 걸러내고 이후 다중분류에 들어가는 복합 모델을 설계했습니다<br>"
+            , unsafe_allow_html=True)
+            st.image('image/steel_insight.gif', use_column_width=True)
+
     if selected_menu == '데이터 시각화':
 
         st.sidebar.title('Steel Features')
