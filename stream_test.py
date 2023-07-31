@@ -126,14 +126,22 @@ if choose == "Home":
     st.markdown("##### 전복, 중성자별, 강판 경함 데이터를 기반으로 새로운 ML/DL 모델을 설계했습니다\n"
                 "###### 1. 전복 모델은 성별, 무게, 크기로 고리 수를 예측하고 나이를 추론하는 모델입니다\n"
                 "###### 2. 중성자별 모델은 별의 Profile과 관측치로 중성자별 여부를 판단하는 모델입니다\n"
-                "###### 3. 강판 모델은 결함 검사 시 얻을 수 있는 여러 지표를 토대로 결함의 종류를 판단하는 혼합 모델입니다"
+                "###### 3. 강판 모델은 결함 검사 시 얻을 수 있는 여러 지표를 토대로 결함의 종류를 판단하는 혼합 모델입니다. "
                 "경미한 결함은 이진분류 모델, 그 외의 결함은 다중분류 모델을 통해 분류합니다\n" 
                                 ,unsafe_allow_html=True)
     
     tab1, tab2, tab3 = st.tabs([":sunglasses:팀원 소개", ":toolbox:웹페이지 기능", ":timer_clock:프로젝트 플랜"])
 
     with tab1:
-        st.subheader("공교롭게도 판교에 취업하고 싶은 남자 넷이 모였습니다")
+        st.subheader("팀원 소개")
+        st.markdown("##### 김범성<br>" ,unsafe_allow_html=True)
+        st.markdown("머신러닝, streamlit 담당" ,unsafe_allow_html=True)
+        st.markdown("##### 팀장 박재형<br>" ,unsafe_allow_html=True)
+        st.markdown("딥러닝, 전반적인 모델성능 개선, ppt 담당" ,unsafe_allow_html=True)
+        st.markdown("##### 성진현<br>" ,unsafe_allow_html=True)
+        st.markdown("머신러닝, streamlit, ppt 담당" ,unsafe_allow_html=True)
+        st.markdown("##### 이태령<br>" ,unsafe_allow_html=True)
+        st.markdown("딥러닝, 모델성능개선, 깃허브 관리" ,unsafe_allow_html=True)
 
     with tab2:
         st.subheader("_이 웹페이지는_")
@@ -176,6 +184,7 @@ if choose == "전복(Abalone)":
                 st.image("image/abalone.jpeg", use_column_width=True)
             
             # 특성 설명
+            st.markdown('_전복 데이터셋은 4177개의 행과 9개의 특성을 갖습니다. 껍질에 나타나는 고리의 수는 전복의 나이를 책정하는 척도입니다. 성별과 크기, 무게와 관련된 8개의 특성을 기반으로 껍질의 수를 예측해야 합니다_')
             st.markdown('- **Sex** : 전복 성별 / object / F, M, I 중 하나의 값을 가진다. 유아기인 경우 I로 표시한다, 미성숙한 전복은 자웅동체이기 때문이다')
             st.markdown('- **Length** : 전복 길이 / mm / float : 껍질의 최대 길이를 의미 상단 그림 참고')
             st.markdown('- **Diameter** : 전복 지름 / mm / float : Length를 쟀을 때와 수직으로 잴 때의 길이를 말함')
@@ -331,6 +340,7 @@ if choose == "중성자별(Star)":
             # 특성 설명
             st.header("중성자별 데이터")
             st.image("image/star.jpeg", use_column_width=True)
+            st.markdown("_중성자별 데이터셋은 17898개의 행과 9개의 특성으로 구성됩니다. target class 특성은 0, 1로 중성자별 여부를 표현합니다. 각 별의 통합적인 Profile과 DM-SNR Curve에서 도출한 통계치로 8개 특성이 구성됩니다._")
             st.markdown('- **Mean of the Integrated Profile (통합 프로파일의 평균)**')
             st.write('통합 프로파일에서 얻은 측정값들의 평균값을 나타냅니다.')
             st.write('통합 프로파일은 여러 개의 라디오 펄스를 하나로 통합한 것으로, 천체의 특성을 반영하는 신호들이 포함되어 있습니다. 이 평균값은 천체의 펄스 특성을 나타내는 중심적인 측정치입니다.')
@@ -475,7 +485,7 @@ if choose == "강판(Steel)":
         if selected_sub_menu == "특성 설명":
             st.header("강판 결함 데이터")
             st.image('image/steel.jpeg')
-
+            st.markdown('_강판 결함 데이터셋은 1942개의 행과 27개의 특성을 갖습니다. 각 특성은 결함의 기하적인 모양과 윤곽을 설명합니다. "Faulty Steel Plates"열은 6개 종류의 결함과 기타 결함으로 분류된 범주형 데이터입니다._')
             
             st.markdown('- **X_Minimum** : 결함이 있는 영역의 X 좌표 중 최소값(전처리 과정에서 Area 특성을 생성하고 제거)')
             st.markdown('- **X_Maximum** : 결함이 있는 영역의 X 좌표 중 최대값(위와 동일)')
